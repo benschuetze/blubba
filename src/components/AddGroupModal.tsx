@@ -1,3 +1,4 @@
+import { ISODateString } from "@capacitor/core";
 import {
   IonButton,
   IonButtons,
@@ -9,29 +10,46 @@ import {
   IonContent,
   IonLabel,
   IonTextarea,
+  IonDatetime,
 } from "@ionic/react";
 import { useRef } from "react";
 
+const inputStyle = {
+  "--padding-start": "10px",
+  "--padding-end": "10px",
+  "--border-radius": "8px",
+  "--border": "2px solid white",
+  "--background": "#f0f0f0",
+
+  "--color": "black",
+  marginBottom: "16px",
+};
+
+const textareaStyle = {
+  ...inputStyle,
+  "--height": "100vh", // You can adjust the height as needed
+  "--resize": "none",
+};
+
 const AddGroupModal = () => {
-  const inputStyle = {
-    "--padding-start": "10px",
-    "--padding-end": "10px",
-    "--border-radius": "8px",
-    "--border": "2px solid white",
-    "--background": "#f0f0f0",
-    "--height": "10%",
-    "--color": "black",
-  };
-
-  const textareaStyle = {
-    ...inputStyle,
-    "--height": "30%", // You can adjust the height as needed
-    "--resize": "none",
-  };
-
   const modal = useRef<HTMLIonModalElement>(null);
   const nameInput = useRef<HTMLIonInputElement>(null);
   const descriptionInput = useRef<HTMLIonTextareaElement>(null);
+  const dateInput = useRef<HTMLIonDatetimeElement>(null);
+
+  let date: Date;
+  let name: string;
+  let description: string;
+
+  const handleOnChange = (e: CustomEvent, variableToSet: string) => {
+    if (variableToSet === "name") name = e.detail.value;
+    if (variableToSet === "date") date = e.detail.value;
+    if (variableToSet === "description") description = e.detail.value;
+  };
+
+  const createGroup = () => {
+    console.log("VALUES: ", { date, name, description });
+  };
 
   return (
     <IonModal trigger="open-add-group-modal" ref={modal}>
@@ -44,7 +62,7 @@ const AddGroupModal = () => {
           </IonButtons>
 
           <IonButtons slot="end">
-            <IonButton strong={true} onClick={() => confirm()}>
+            <IonButton strong={true} onClick={() => createGroup()}>
               Create
             </IonButton>
           </IonButtons>
@@ -53,21 +71,31 @@ const AddGroupModal = () => {
 
       <IonContent className="ion-padding">
         <div>
-          <IonLabel>Name</IonLabel>
           <IonInput
             style={inputStyle}
             id="custom-input"
             labelPlacement="stacked"
             ref={nameInput}
+            placeholder="Who is the lucky person?"
+            onIonChange={(e) => handleOnChange(e, "name")}
           ></IonInput>
         </div>
         <div>
-          <IonLabel>Description</IonLabel>
           <IonTextarea
             style={textareaStyle}
             ref={descriptionInput}
-            placeholder="Enter your description..."
+            placeholder="What is the occasion?"
+            autoGrow={true}
+            counter={true}
+            maxlength={300}
+            onIonChange={(e) => handleOnChange(e, "description")}
           ></IonTextarea>
+        </div>
+        <div>
+          <IonDatetime
+            ref={dateInput}
+            onIonChange={(e) => handleOnChange(e, "date")}
+          ></IonDatetime>
         </div>
       </IonContent>
     </IonModal>
