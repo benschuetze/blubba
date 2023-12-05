@@ -1,6 +1,14 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
-import './Home.css';
+import {
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+} from "@ionic/react";
+import ExploreContainer from "../components/ExploreContainer";
+import "./Home.css";
+import GroupList from "../components/GroupList";
+import AddGroupModal from "../components/AddGroupModal";
 
 const Home: React.FC = () => {
   return (
@@ -13,10 +21,11 @@ const Home: React.FC = () => {
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Blank</IonTitle>
+            <IonTitle size="large">Blubba</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <ExploreContainer />
+        <GroupList />
+        <AddGroupModal />
       </IonContent>
     </IonPage>
   );
