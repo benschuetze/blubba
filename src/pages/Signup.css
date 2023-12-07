@@ -1,0 +1,7 @@
+.small-label {
+  font-size: 12px; /* Adjust the font size as needed */
+  position: absolute;
+  bottom: 8px; /* Adjust the distance from the input field as needed */
+  left: 8px; /* Adjust the distance from the left as needed */
+  pointer-events: none; /* Ensure the label doesn't interfere with input events */
+}
