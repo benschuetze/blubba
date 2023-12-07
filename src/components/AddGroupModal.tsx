@@ -1,10 +1,8 @@
-import { ISODateString } from "@capacitor/core";
 import {
   IonButton,
   IonButtons,
   IonHeader,
   IonModal,
-  IonTitle,
   IonToolbar,
   IonInput,
   IonContent,
@@ -13,6 +11,8 @@ import {
   IonDatetime,
 } from "@ionic/react";
 import { useRef } from "react";
+import { supabase } from "../../supabase";
+import { error } from "console";
 
 const inputStyle = {
   "--padding-start": "10px",
@@ -27,7 +27,7 @@ const inputStyle = {
 
 const textareaStyle = {
   ...inputStyle,
-  "--height": "100vh", // You can adjust the height as needed
+  "--height": "100vh",
   "--resize": "none",
 };
 
@@ -37,18 +37,17 @@ const AddGroupModal = () => {
   const descriptionInput = useRef<HTMLIonTextareaElement>(null);
   const dateInput = useRef<HTMLIonDatetimeElement>(null);
 
-  let date: Date;
-  let name: string;
-  let description: string;
+  const createGroup = async () => {
+    const date = dateInput.current?.value;
+    const name = nameInput.current?.value;
+    const description = descriptionInput.current?.value;
 
-  const handleOnChange = (e: CustomEvent, variableToSet: string) => {
-    if (variableToSet === "name") name = e.detail.value;
-    if (variableToSet === "date") date = e.detail.value;
-    if (variableToSet === "description") description = e.detail.value;
-  };
-
-  const createGroup = () => {
-    console.log("VALUES: ", { date, name, description });
+    if (date && description && name) {
+      const { error } = await supabase
+        .from("groups")
+        .insert({ title: name, description: description, dueDate: date });
+      console.log("RETURNTER ERROR: ", error);
+    }
   };
 
   return (
@@ -77,7 +76,6 @@ const AddGroupModal = () => {
             labelPlacement="stacked"
             ref={nameInput}
             placeholder="Who is the lucky person?"
-            onIonChange={(e) => handleOnChange(e, "name")}
           ></IonInput>
         </div>
         <div>
@@ -88,15 +86,11 @@ const AddGroupModal = () => {
             autoGrow={true}
             counter={true}
             maxlength={300}
-            onIonChange={(e) => handleOnChange(e, "description")}
           ></IonTextarea>
         </div>
         <div>
           <IonLabel>Due Date</IonLabel>
-          <IonDatetime
-            ref={dateInput}
-            onIonChange={(e) => handleOnChange(e, "date")}
-          ></IonDatetime>
+          <IonDatetime ref={dateInput}></IonDatetime>
         </div>
       </IonContent>
     </IonModal>
