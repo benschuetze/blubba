@@ -92,6 +92,7 @@ const AddGroupModal = () => {
           ></IonTextarea>
         </div>
         <div>
+          <IonLabel>Due Date</IonLabel>
           <IonDatetime
             ref={dateInput}
             onIonChange={(e) => handleOnChange(e, "date")}
