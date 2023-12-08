@@ -1,14 +1,14 @@
 import { IonFab, IonFabButton, IonIcon } from "@ionic/react";
 import { add } from "ionicons/icons";
 
-const AddGroupButton = () => {
+const AddButton = ({ openID }) => {
   return (
     <IonFab slot="fixed" horizontal="end" vertical="bottom">
-      <IonFabButton id="open-add-group-modal">
+      <IonFabButton id={openID}>
         <IonIcon icon={add}></IonIcon>
       </IonFabButton>
     </IonFab>
   );
 };
 
-export default AddGroupButton;
+export default AddButton;

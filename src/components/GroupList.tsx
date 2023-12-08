@@ -1,5 +1,5 @@
 import { IonItem, IonList, IonLabel } from "@ionic/react";
-import AddGroupButton from "./AddGroupButton";
+import AddButton from "./AddButton";
 
 export const GroupList = () => {
   return (
@@ -21,7 +21,7 @@ export const GroupList = () => {
           <IonLabel>Pokémon Yellow</IonLabel>
         </IonItem>
       </IonList>
-      <AddGroupButton />
+      <AddButton openID={"open-add-group-modal"} />
     </div>
   );
 };

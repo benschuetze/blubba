@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../supabase";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
+import GroupPage from "./pages/GroupPage";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -65,6 +66,9 @@ const App: React.FC = () => {
           </Route>
           <Route exact path="/signup">
             <Signup />
+          </Route>
+          <Route path="/groups/:id">
+            <GroupPage />
           </Route>
         </IonRouterOutlet>
       </IonReactRouter>

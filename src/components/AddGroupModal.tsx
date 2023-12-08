@@ -10,6 +10,7 @@ import {
   IonTextarea,
   IonDatetime,
 } from "@ionic/react";
+import { useHistory } from "react-router-dom";
 import { useRef } from "react";
 import { supabase } from "../../supabase";
 import { error } from "console";
@@ -37,16 +38,25 @@ const AddGroupModal = () => {
   const descriptionInput = useRef<HTMLIonTextareaElement>(null);
   const dateInput = useRef<HTMLIonDatetimeElement>(null);
 
+  const history = useHistory();
+
   const createGroup = async () => {
     const date = dateInput.current?.value;
     const name = nameInput.current?.value;
     const description = descriptionInput.current?.value;
 
     if (date && description && name) {
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from("groups")
-        .insert({ title: name, description: description, dueDate: date });
-      console.log("RETURNTER ERROR: ", error);
+        .insert({ title: name, description: description, dueDate: date })
+        .select();
+      console.log("HAllo was geht denn  hier ab, ", data);
+      if (!error) {
+        modal.current?.dismiss();
+        history.push(`./groups/${data[0].id}`);
+        // force reload to go to group page
+        history.go(0);
+      }
     }
   };
 
