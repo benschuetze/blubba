@@ -1,17 +1,37 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabase";
+import {
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+} from "@ionic/react";
 import AddButton from "../components/AddButton";
 import AddIdeaModal from "../components/AddIdeaModal";
+import IdeaCard from "../components/IdeaCard";
 
 interface RouteParams {
   id: string;
 }
 
+interface Idea {
+  created_at: Date;
+
+  group_id: string;
+
+  id: string;
+
+  text: string;
+
+  user_id: string;
+}
+
 const GroupPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [ideas, setIdeas] = useState([]);
+  const [ideas, setIdeas] = useState<Array<Idea>>([]);
 
   const { id }: RouteParams = useParams();
 
@@ -37,7 +57,9 @@ const GroupPage = () => {
         .select()
         .eq("group_id", id);
 
-      console.log("data: ", { data, error });
+      if (data) {
+        setIdeas(data);
+      }
     } catch (e) {
       console.log("ERROR: Request Error: ", e);
     }
@@ -61,7 +83,21 @@ const GroupPage = () => {
 
   return (
     <div>
-      <span>Hallo Gruppenmitglied </span>
+      {ideas.map((idea) => {
+        return (
+          <IonCard>
+            <IonCardHeader>
+              <IonCardTitle>Card Title</IonCardTitle>
+              <IonCardSubtitle>Card Subtitle</IonCardSubtitle>
+            </IonCardHeader>
+
+            <IonCardContent>
+              Here's a small text description for the card content. Nothing
+              more, nothing less.
+            </IonCardContent>
+          </IonCard>
+        );
+      })}
       <AddButton openID={"open-add-idea-modal"} />
       <AddIdeaModal groupID={id} />
     </div>
