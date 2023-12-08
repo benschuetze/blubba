@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabase";
 import {
@@ -10,7 +10,6 @@ import {
 } from "@ionic/react";
 import AddButton from "../components/AddButton";
 import AddIdeaModal from "../components/AddIdeaModal";
-import IdeaCard from "../components/IdeaCard";
 
 interface RouteParams {
   id: string;
@@ -18,14 +17,11 @@ interface RouteParams {
 
 interface Idea {
   created_at: Date;
-
   group_id: string;
-
   id: string;
-
   text: string;
-
   user_id: string;
+  title: string;
 }
 
 const GroupPage = () => {
@@ -33,11 +29,13 @@ const GroupPage = () => {
   const [error, setError] = useState(false);
   const [ideas, setIdeas] = useState<Array<Idea>>([]);
 
-  const { id }: RouteParams = useParams();
+  const history = useHistory();
+
+  const { id: groupID }: RouteParams = useParams();
 
   const getGroupData = async () => {
     try {
-      const { data } = await supabase.from("groups").select().eq("id", id);
+      const { data } = await supabase.from("groups").select().eq("id", groupID);
 
       if (data?.length === 0) {
         setLoading(false);
@@ -55,7 +53,7 @@ const GroupPage = () => {
       const { data, error } = await supabase
         .from("ideas")
         .select()
-        .eq("group_id", id);
+        .eq("group_id", groupID);
 
       if (data) {
         setIdeas(data);
@@ -84,22 +82,42 @@ const GroupPage = () => {
   return (
     <div>
       {ideas.map((idea) => {
+        console.log("idea id: ", idea.id);
+        const creationDateObject = new Date(idea.created_at);
+        const year = creationDateObject.getFullYear();
+        const month = String(creationDateObject.getMonth() + 1).padStart(
+          2,
+          "0"
+        );
+
+        const day = String(creationDateObject.getDate()).padStart(2, "0");
+
+        const creationDate = `${day}.${month}.${String(year).slice(-2)}`;
+
         return (
-          <IonCard>
+          <IonCard
+            key={idea.id}
+            onClick={() => {
+              history.push(`./${idea.id}`);
+              history.go(0);
+            }}
+          >
             <IonCardHeader>
-              <IonCardTitle>Card Title</IonCardTitle>
-              <IonCardSubtitle>Card Subtitle</IonCardSubtitle>
+              <IonCardTitle>{idea.title || "No Title"}</IonCardTitle>
+              <IonCardSubtitle style={{ textTransform: "none" }}>
+                Benny
+              </IonCardSubtitle>
+              <IonCardSubtitle style={{ marginLeft: "auto" }}>
+                {creationDate}
+              </IonCardSubtitle>
             </IonCardHeader>
 
-            <IonCardContent>
-              Here's a small text description for the card content. Nothing
-              more, nothing less.
-            </IonCardContent>
+            <IonCardContent>{idea.text}</IonCardContent>
           </IonCard>
         );
       })}
       <AddButton openID={"open-add-idea-modal"} />
-      <AddIdeaModal groupID={id} />
+      <AddIdeaModal groupID={groupID} />
     </div>
   );
 };
