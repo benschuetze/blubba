@@ -46,7 +46,7 @@ const Login = () => {
         console.error("Login error:", error.message);
       } else {
         console.log("Login success:", data);
-        history.push("/home");
+        history.push("home");
       }
     } catch (error) {
       console.error("Unexpected error:", error);

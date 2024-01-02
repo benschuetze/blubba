@@ -82,7 +82,6 @@ const GroupPage = () => {
   return (
     <div>
       {ideas.map((idea) => {
-        console.log("idea id: ", idea.id);
         const creationDateObject = new Date(idea.created_at);
         const year = creationDateObject.getFullYear();
         const month = String(creationDateObject.getMonth() + 1).padStart(
@@ -98,7 +97,7 @@ const GroupPage = () => {
           <IonCard
             key={idea.id}
             onClick={() => {
-              history.push(`./${idea.id}`);
+              history.push(`./${groupID}/${idea.id}`, idea);
               history.go(0);
             }}
           >

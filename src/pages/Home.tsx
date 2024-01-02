@@ -9,6 +9,7 @@ import {
 import "./Home.css";
 import GroupList from "../components/GroupList";
 import AddGroupModal from "../components/AddGroupModal";
+import AddButton from "../components/AddButton";
 
 const Home: React.FC = () => {
   return (
@@ -28,6 +29,7 @@ const Home: React.FC = () => {
         <GroupList />
         <AddGroupModal />
       </IonContent>
+      <AddButton openID={"open-add-group-modal"} />
     </IonPage>
   );
 };

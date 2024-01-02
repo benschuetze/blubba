@@ -36,7 +36,7 @@ const App: React.FC = () => {
 
   const handleAuth = async () => {
     const session = await supabase.auth.getSession();
-    setIsLoggedIn(!!session);
+    setIsLoggedIn(!!session.data.session);
     setLoading(false);
   };
 

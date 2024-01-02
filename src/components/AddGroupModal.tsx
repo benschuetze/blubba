@@ -45,6 +45,10 @@ const AddGroupModal = () => {
     const name = nameInput.current?.value;
     const description = descriptionInput.current?.value;
 
+    const session = await supabase.auth.getSession();
+
+    console.log("session: ", session);
+
     if (date && description && name) {
       const { data, error } = await supabase
         .from("groups")
@@ -56,6 +60,9 @@ const AddGroupModal = () => {
         history.push(`./groups/${data[0].id}`);
         // force reload to go to group page
         history.go(0);
+      }
+      if (error) {
+        console.log("Error while posting: ", error);
       }
     }
   };
